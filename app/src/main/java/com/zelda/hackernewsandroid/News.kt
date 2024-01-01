@@ -1,7 +1,7 @@
 package com.zelda.hackernewsandroid
 
-class News(var title: String,
-           var context: String,
-//           val url: String
-) {
-}
+class News(
+    var title: String,
+    var context: String,
+    var url: String
+)

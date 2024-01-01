@@ -75,4 +75,8 @@ dependencies {
     implementation("com.google.code.gson:gson:$retrofit_version")
     // OkHttp for logging interceptor
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.6")
+
+    //  making HTTP requests and Jsoup for parsing HTML
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation("org.jsoup:jsoup:1.13.1")
 }
