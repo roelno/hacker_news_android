@@ -26,11 +26,21 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        // Obtain ViewModel from the ViewModelProvider
+        val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        fetchTopNews()
+        // Set up the RecyclerView with an empty adapter initially
+        setupRecyclerView()
+
+        // Observe the newsList LiveData
+        homeViewModel.newsList.observe(viewLifecycleOwner) { news ->
+            (binding.newsRecyclerView.adapter as? NewsRecyclerViewAdapter)?.updateNewsList(news)
+        }
+
+        // Trigger data fetch
+        homeViewModel.fetchTopNews()
         return root
     }
 
@@ -58,7 +68,7 @@ class HomeFragment : Fragment() {
     private fun setupRecyclerView() {
         binding.newsRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = NewsRecyclerViewAdapter(newsList)
+            adapter = NewsRecyclerViewAdapter(mutableListOf()) // Initialize with a mutable empty list
         }
     }
 
