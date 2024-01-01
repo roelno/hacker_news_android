@@ -5,9 +5,12 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface HackerNewsApiService {
-    @GET("item/{id}.json")
-    suspend fun getStory(@Path("id") id: Int): News
+    @GET("newstories.json")
+    suspend fun getNewStoryIds(): List<Long>
 
-    @GET("/newstories")
-    suspend fun getNewStories(@Path("id") id: Int): List<News>
+    @GET("topstories.json")
+    suspend fun getTopStoryIds(): List<Long>
+
+    @GET("item/{id}.json")
+    suspend fun getStory(@Path("id") id: Long): News
 }
