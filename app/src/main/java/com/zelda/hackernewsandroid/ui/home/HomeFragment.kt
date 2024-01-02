@@ -18,25 +18,26 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
-    private var newsList = mutableListOf<News>()
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         // Obtain ViewModel from the ViewModelProvider
         val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        // Set up the RecyclerView with an empty adapter initially
         setupRecyclerView()
+
+        // Set up the swipe refresh action
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            homeViewModel.fetchTopNews()
+        }
 
         // Observe the newsList LiveData
         homeViewModel.newsList.observe(viewLifecycleOwner) { news ->
             (binding.newsRecyclerView.adapter as? NewsRecyclerViewAdapter)?.updateNewsList(news)
+            binding.swipeRefreshLayout.isRefreshing = false // Stop the refreshing indicator
         }
 
         // Trigger data fetch
@@ -44,31 +45,11 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    private fun fetchTopNews() {
-        lifecycleScope.launch {
-            try {
-                val storyIds = RetrofitInstance.api.getTopStoryIds()
-                storyIds.take(50) // Taking only the first 50 stories
-                    .forEach { id ->
-                        try {
-                            val story = RetrofitInstance.api.getStory(id)
-                            newsList.add(story)
-                        } catch (e: Exception) {
-                            // Handle exceptions for individual story fetch
-                        }
-                    }
-                setupRecyclerView()
-            } catch (e: Exception) {
-                // Handle exceptions for fetching story IDs
-            }
-        }
-    }
-
-
     private fun setupRecyclerView() {
         binding.newsRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = NewsRecyclerViewAdapter(mutableListOf()) // Initialize with a mutable empty list
+            adapter =
+                NewsRecyclerViewAdapter(mutableListOf()) // Initialize with a mutable empty list
         }
     }
 

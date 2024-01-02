@@ -39,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     val retrofit_version = "2.9.0"
     val coroutines_version = "1.7.3"
     val lifecycle_version = "2.6.2"
