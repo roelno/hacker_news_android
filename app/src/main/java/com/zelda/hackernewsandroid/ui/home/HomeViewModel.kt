@@ -23,17 +23,23 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val storyIds = RetrofitInstance.api.getTopStoryIds()
-                val stories = storyIds.take(50) // Taking only the first 50 stories
-                    .map { id -> async { fetchStoryWithContent(id) } }
-                    .awaitAll()
-                    .filterNotNull()
-
-                _newsList.postValue(stories)
+                storyIds.take(6).forEach { id ->
+                    launch {
+                        val story = fetchStoryWithContent(id)
+                        story?.let {
+                            // Update LiveData in a thread-safe way
+                            val currentList = _newsList.value?.toMutableList() ?: mutableListOf()
+                            currentList.add(it)
+                            _newsList.postValue(currentList)
+                        }
+                    }
+                }
             } catch (e: Exception) {
                 // Handle exceptions
             }
         }
     }
+
 
     private suspend fun fetchStoryWithContent(id: Long): News? {
         return withContext(Dispatchers.IO) { // Switch to IO dispatcher for network operation
