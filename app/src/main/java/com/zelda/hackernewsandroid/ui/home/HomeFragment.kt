@@ -6,13 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.zelda.hackernewsandroid.News
 import com.zelda.hackernewsandroid.NewsRecyclerViewAdapter
-import com.zelda.hackernewsandroid.api.RetrofitInstance
 import com.zelda.hackernewsandroid.databinding.FragmentHomeBinding
-import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
@@ -36,9 +32,12 @@ class HomeFragment : Fragment() {
         }
 
         // Observe the newsList LiveData
-        homeViewModel.newsList.observe(viewLifecycleOwner) { news ->
-            (binding.newsRecyclerView.adapter as? NewsRecyclerViewAdapter)?.updateNewsList(news)
-            binding.swipeRefreshLayout.isRefreshing = false // Stop the refreshing indicator
+        homeViewModel.newsList.observe(viewLifecycleOwner) { newsList ->
+            val filteredList = newsList.filterNotNull()
+            (binding.newsRecyclerView.adapter as? NewsRecyclerViewAdapter)?.updateNewsList(filteredList)
+            if (filteredList.size == newsList.size) {
+                binding.swipeRefreshLayout.isRefreshing = false // Stop the refreshing indicator when all items are loaded
+            }
         }
 
         // Trigger data fetch
