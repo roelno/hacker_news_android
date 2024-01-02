@@ -1,5 +1,6 @@
 package com.zelda.hackernewsandroid.ui.topstory
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +14,6 @@ import kotlinx.coroutines.withContext
 
 class TopStoryViewModel : ViewModel() {
 
-    // LiveData for managing news data
     private val _newsList = MutableLiveData<MutableList<News?>>()
     val newsList: LiveData<MutableList<News?>> = _newsList
 
@@ -24,6 +24,9 @@ class TopStoryViewModel : ViewModel() {
     var isLoading = false
     var isLastPage = false
 
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String> = _errorMessage
+
     init {
         fetchStoryIds()
     }
@@ -32,9 +35,10 @@ class TopStoryViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 storyIds = RetrofitInstance.api.getTopStoryIds()
-                loadMoreNews() // Load initial set of news
+                loadMoreNews()
             } catch (e: Exception) {
-                // Handle exceptions
+                Log.e("TopStoryViewModel", "Error fetching top story IDs", e)
+                _errorMessage.postValue("Error fetching data")
             }
         }
     }
@@ -57,16 +61,10 @@ class TopStoryViewModel : ViewModel() {
                     _newsList.postValue(currentList.filterNotNull().toMutableList())
                 }
             }
-
             lastIndex = endIndex
             isLoading = false
             isLastPage = endIndex == storyIds.size
         }
-    }
-
-
-    fun clearNewsList() {
-        _newsList.value = mutableListOf()
     }
 
     private suspend fun fetchStoryWithContent(id: Long): News? {
@@ -76,7 +74,8 @@ class TopStoryViewModel : ViewModel() {
                 story.context = ContentExtractor.fetchContent(story.url).take(300)
                 story
             } catch (e: Exception) {
-                null // Handle exceptions appropriately
+                Log.e("TopStoryViewModel", "Error fetching story content for ID: $id", e)
+                null
             }
         }
     }
@@ -89,5 +88,3 @@ class TopStoryViewModel : ViewModel() {
     }
 
 }
-
-
