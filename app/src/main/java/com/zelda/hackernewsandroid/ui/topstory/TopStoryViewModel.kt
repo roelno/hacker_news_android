@@ -1,4 +1,4 @@
-package com.zelda.hackernewsandroid.ui.home
+package com.zelda.hackernewsandroid.ui.topstory
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HomeViewModel : ViewModel() {
+class TopStoryViewModel : ViewModel() {
 
     // LiveData for managing news data
     private val _newsList = MutableLiveData<MutableList<News?>>()

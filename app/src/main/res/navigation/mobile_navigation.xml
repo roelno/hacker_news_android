@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_top_story">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.zelda.hackernewsandroid.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_top_story"
+        android:name="com.zelda.hackernewsandroid.ui.topstory.TopStoryFragment"
+        android:label="Top Stories"
+        tools:layout="@layout/fragment_top_story" />
 
     <fragment
         android:id="@+id/navigation_dashboard"

@@ -1,4 +1,4 @@
-package com.zelda.hackernewsandroid.ui.home
+package com.zelda.hackernewsandroid.ui.topstory
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,31 +8,31 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zelda.hackernewsandroid.NewsRecyclerViewAdapter
-import com.zelda.hackernewsandroid.databinding.FragmentHomeBinding
+import com.zelda.hackernewsandroid.databinding.FragmentTopStoryBinding
 
-class HomeFragment : Fragment() {
+class TopStoryFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentTopStoryBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         // Obtain ViewModel from the ViewModelProvider
-        val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val topStoryViewModel = ViewModelProvider(this)[TopStoryViewModel::class.java]
+        _binding = FragmentTopStoryBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         setupRecyclerView()
 
         // Set up the swipe refresh action
         binding.swipeRefreshLayout.setOnRefreshListener {
-            homeViewModel.clearNewsList() // Clear current data
-            homeViewModel.fetchTopNews()
+            topStoryViewModel.clearNewsList() // Clear current data
+            topStoryViewModel.fetchTopNews()
         }
 
         // Observe the newsList LiveData
-        homeViewModel.newsList.observe(viewLifecycleOwner) { newsList ->
+        topStoryViewModel.newsList.observe(viewLifecycleOwner) { newsList ->
             val filteredList = newsList.filterNotNull()
             (binding.newsRecyclerView.adapter as? NewsRecyclerViewAdapter)?.updateNewsList(filteredList)
             if (filteredList.size == newsList.size) {
@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
         }
 
         // Trigger data fetch
-        homeViewModel.fetchTopNews()
+        topStoryViewModel.fetchTopNews()
         return root
     }
 
