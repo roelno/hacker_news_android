@@ -44,7 +44,7 @@ class TopStoryFragment : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 if (!topStoryViewModel.isLoading && !topStoryViewModel.isLastPage) {
-                    if (layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1) {
+                    if (layoutManager.findLastCompletelyVisibleItemPosition() >= adapter.itemCount - 10) {
                         topStoryViewModel.loadMoreNews()
                     }
                 }

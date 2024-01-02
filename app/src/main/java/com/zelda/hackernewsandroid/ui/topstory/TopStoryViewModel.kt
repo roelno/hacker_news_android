@@ -8,7 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.zelda.hackernewsandroid.ContentExtractor
 import com.zelda.hackernewsandroid.News
 import com.zelda.hackernewsandroid.api.RetrofitInstance
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -19,7 +22,7 @@ class TopStoryViewModel : ViewModel() {
 
     private var storyIds = listOf<Long>()
     private var lastIndex = 0
-    private val pageSize = 5
+    private val pageSize = 20
 
     var isLoading = false
     var isLastPage = false
@@ -48,19 +51,27 @@ class TopStoryViewModel : ViewModel() {
 
         isLoading = true
         val endIndex = minOf(lastIndex + pageSize, storyIds.size)
-
-        // Pre-allocate space for the new items
         val currentList = _newsList.value.orEmpty().toMutableList()
-        currentList.addAll(List(endIndex - lastIndex) { null })
+        val placeholders = List(endIndex - lastIndex) { null }
+        currentList.addAll(placeholders)
         _newsList.postValue(currentList)
 
         viewModelScope.launch {
+            // fetches each item in its own coroutine but updates a shared list in a thread-safe
+            val fetchJobs = mutableListOf<Deferred<Unit>>()
+
             storyIds.subList(lastIndex, endIndex).forEachIndexed { index, id ->
-                fetchStoryWithContent(id)?.let { newsItem ->
-                    currentList[lastIndex + index] = newsItem
-                    _newsList.postValue(currentList.filterNotNull().toMutableList())
+                val fetchJob = async(Dispatchers.IO) {
+                    val newsItem = fetchStoryWithContent(id)
+                    withContext(Dispatchers.Main) {
+                        currentList[lastIndex + index] = newsItem
+                        _newsList.value = currentList.filterNotNull().toMutableList()
+                    }
                 }
+                fetchJobs.add(fetchJob)
             }
+
+            fetchJobs.awaitAll()
             lastIndex = endIndex
             isLoading = false
             isLastPage = endIndex == storyIds.size
