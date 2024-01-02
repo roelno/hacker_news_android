@@ -43,7 +43,7 @@ class TopStoryFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                if (!topStoryViewModel.isLoading && !topStoryViewModel.isLastPage) {
+                if (topStoryViewModel.isLoading.value == false && !topStoryViewModel.isLastPage) {
                     if (layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1) {
                         topStoryViewModel.loadMoreNews()
                     }
@@ -65,7 +65,12 @@ class TopStoryFragment : Fragment() {
                 nonNullNewsList
             )
             binding.swipeRefreshLayout.isRefreshing = false
+            updateLoadingStatus(false)
         }
+    }
+
+    private fun updateLoadingStatus(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun setupErrorMessageObserver() {

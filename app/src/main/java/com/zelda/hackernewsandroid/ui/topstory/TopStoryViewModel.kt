@@ -24,8 +24,10 @@ class TopStoryViewModel : ViewModel() {
     private var lastIndex = 0
     private val pageSize = 20
 
-    var isLoading = false
+    //    var isLoading = false
+    var isLoading = MutableLiveData<Boolean>().apply { value = false }
     var isLastPage = false
+    private var loadingItemCount = 0
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> = _errorMessage
@@ -47,33 +49,41 @@ class TopStoryViewModel : ViewModel() {
     }
 
     fun loadMoreNews() {
-        if (isLoading || isLastPage) return
+        if (isLoading.value == true || isLastPage || loadingItemCount > 0) return
 
-        isLoading = true
+        isLoading.postValue(true)
         val endIndex = minOf(lastIndex + pageSize, storyIds.size)
         val currentList = _newsList.value.orEmpty().toMutableList()
+        Log.i("TopStoryVM", "_newsList size is ${_newsList.value?.size} before posting currentList")
+        Log.i("TopStoryVM", "currentList size is ${currentList.size} before adding placeholder")
         val placeholders = List(endIndex - lastIndex) { null }
         currentList.addAll(placeholders)
+        Log.i("TopStoryVM", "currentList size is ${currentList.size} after adding placeholder")
         _newsList.postValue(currentList)
+        Log.i("TopStoryVM", "_newsList size is ${_newsList.value?.size} after posting currentList")
+        Log.i("TopStoryVM", "endIndex is $endIndex initially")
 
         viewModelScope.launch {
-            // fetches each item in its own coroutine but updates a shared list in a thread-safe
             val fetchJobs = mutableListOf<Deferred<Unit>>()
 
             storyIds.subList(lastIndex, endIndex).forEachIndexed { index, id ->
+                loadingItemCount++  // Increment counter
                 val fetchJob = async(Dispatchers.IO) {
                     val newsItem = fetchStoryWithContent(id)
                     withContext(Dispatchers.Main) {
                         currentList[lastIndex + index] = newsItem
-                        _newsList.value = currentList.filterNotNull().toMutableList()
+                        Log.i("TopStoryVM", "currentList size is: ${currentList.size}, lastIndex is $lastIndex, index is $index, endIndex is $endIndex")
+                        _newsList.value = currentList.toMutableList()
+                        loadingItemCount--  // Decrement counter
                     }
+                    Unit // Explicitly return Unit
                 }
                 fetchJobs.add(fetchJob)
             }
 
             fetchJobs.awaitAll()
             lastIndex = endIndex
-            isLoading = false
+            isLoading.postValue(false)
             isLastPage = endIndex == storyIds.size
         }
     }
