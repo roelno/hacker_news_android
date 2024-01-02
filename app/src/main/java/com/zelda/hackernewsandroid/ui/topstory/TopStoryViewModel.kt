@@ -17,40 +17,63 @@ class TopStoryViewModel : ViewModel() {
     private val _newsList = MutableLiveData<MutableList<News?>>()
     val newsList: LiveData<MutableList<News?>> = _newsList
 
-    fun fetchTopNews() {
+    private var storyIds = listOf<Long>()
+    private var lastIndex = 0
+    private val pageSize = 5
+
+    var isLoading = false
+    var isLastPage = false
+
+    init {
+        fetchStoryIds()
+    }
+
+    private fun fetchStoryIds() {
         viewModelScope.launch {
             try {
-                val storyIds = RetrofitInstance.api.getTopStoryIds().take(6)
-                // Initialize the list with nulls
-                val tempList = MutableList<News?>(storyIds.size) { null }
-                _newsList.postValue(tempList)
-
-                storyIds.forEachIndexed { index, id ->
-                    launch {
-                        val story = fetchStoryWithContent(id)
-                        story?.let {
-                            tempList[index] = it
-                            _newsList.postValue(tempList)
-                        }
-                    }
-                }
+                storyIds = RetrofitInstance.api.getTopStoryIds()
+                loadMoreNews() // Load initial set of news
             } catch (e: Exception) {
                 // Handle exceptions
             }
         }
     }
 
+    fun loadMoreNews() {
+        if (isLoading || isLastPage) return
+
+        isLoading = true
+        val endIndex = minOf(lastIndex + pageSize, storyIds.size)
+
+        // Pre-allocate space for the new items
+        val currentList = _newsList.value.orEmpty().toMutableList()
+        currentList.addAll(List(endIndex - lastIndex) { null })
+        _newsList.postValue(currentList)
+
+        viewModelScope.launch {
+            storyIds.subList(lastIndex, endIndex).forEachIndexed { index, id ->
+                fetchStoryWithContent(id)?.let { newsItem ->
+                    currentList[lastIndex + index] = newsItem
+                    _newsList.postValue(currentList.filterNotNull().toMutableList())
+                }
+            }
+
+            lastIndex = endIndex
+            isLoading = false
+            isLastPage = endIndex == storyIds.size
+        }
+    }
+
+
     fun clearNewsList() {
         _newsList.value = mutableListOf()
     }
 
-
     private suspend fun fetchStoryWithContent(id: Long): News? {
-        return withContext(Dispatchers.IO) { // Switch to IO dispatcher for network operation
+        return withContext(Dispatchers.IO) {
             try {
                 val story = RetrofitInstance.api.getStory(id)
-                story.context =
-                    ContentExtractor.fetchContent(story.url).take(300) // Fetch and trim the content
+                story.context = ContentExtractor.fetchContent(story.url).take(300)
                 story
             } catch (e: Exception) {
                 null // Handle exceptions appropriately
@@ -58,5 +81,13 @@ class TopStoryViewModel : ViewModel() {
         }
     }
 
+    fun refreshNews() {
+        lastIndex = 0
+        isLastPage = false
+        _newsList.postValue(mutableListOf())
+        fetchStoryIds()
+    }
 
 }
+
+
