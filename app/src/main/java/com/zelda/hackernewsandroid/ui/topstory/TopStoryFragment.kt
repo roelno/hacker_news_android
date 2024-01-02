@@ -30,6 +30,7 @@ class TopStoryFragment : Fragment() {
         setupSwipeRefreshLayout()
         setupNewsListObserver()
         setupErrorMessageObserver()
+        setupLoadingObserver() // Set up observer for isLoading
 
         return binding.root
     }
@@ -65,13 +66,15 @@ class TopStoryFragment : Fragment() {
                 nonNullNewsList
             )
             binding.swipeRefreshLayout.isRefreshing = false
-            updateLoadingStatus(false)
         }
     }
 
-    private fun updateLoadingStatus(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    private fun setupLoadingObserver() {
+        topStoryViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
     }
+
 
     private fun setupErrorMessageObserver() {
         topStoryViewModel.errorMessage.observe(viewLifecycleOwner) { message ->

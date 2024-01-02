@@ -22,7 +22,7 @@ class TopStoryViewModel : ViewModel() {
 
     private var storyIds = listOf<Long>()
     private var lastIndex = 0
-    private val pageSize = 20
+    private val pageSize = 10
 
     //    var isLoading = false
     var isLoading = MutableLiveData<Boolean>().apply { value = false }
