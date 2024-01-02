@@ -30,7 +30,7 @@ class TopStoryFragment : Fragment() {
         setupSwipeRefreshLayout()
         setupNewsListObserver()
         setupErrorMessageObserver()
-        setupLoadingObserver() // Set up observer for isLoading
+        setupLoadingObserver()
 
         return binding.root
     }
@@ -44,10 +44,14 @@ class TopStoryFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                if (topStoryViewModel.isLoading.value == false && !topStoryViewModel.isLastPage) {
-                    if (layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1) {
-                        topStoryViewModel.loadMoreNews()
-                    }
+                val totalItemCount = layoutManager.itemCount
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                val shouldLoadMore = lastVisibleItemPosition == totalItemCount - 1 &&
+                        !topStoryViewModel.isLoading.value!! &&
+                        !topStoryViewModel.isLastPage
+
+                if (shouldLoadMore) {
+                    topStoryViewModel.loadMoreNews()
                 }
             }
         })
@@ -58,6 +62,7 @@ class TopStoryFragment : Fragment() {
             topStoryViewModel.refreshNews()
         }
     }
+
 
     private fun setupNewsListObserver() {
         topStoryViewModel.newsList.observe(viewLifecycleOwner) { news ->
