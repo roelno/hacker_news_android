@@ -54,29 +54,23 @@ class TopStoryViewModel : ViewModel() {
         isLoading.postValue(true)
         val endIndex = minOf(lastIndex + pageSize, storyIds.size)
         val currentList = _newsList.value.orEmpty().toMutableList()
-        Log.i("TopStoryVM", "_newsList size is ${_newsList.value?.size} before posting currentList")
-        Log.i("TopStoryVM", "currentList size is ${currentList.size} before adding placeholder")
         val placeholders = List(endIndex - lastIndex) { null }
         currentList.addAll(placeholders)
-        Log.i("TopStoryVM", "currentList size is ${currentList.size} after adding placeholder")
         _newsList.postValue(currentList)
-        Log.i("TopStoryVM", "_newsList size is ${_newsList.value?.size} after posting currentList")
-        Log.i("TopStoryVM", "endIndex is $endIndex initially")
 
         viewModelScope.launch {
             val fetchJobs = mutableListOf<Deferred<Unit>>()
 
             storyIds.subList(lastIndex, endIndex).forEachIndexed { index, id ->
-                loadingItemCount++  // Increment counter
+                loadingItemCount++
                 val fetchJob = async(Dispatchers.IO) {
                     val newsItem = fetchStoryWithContent(id)
                     withContext(Dispatchers.Main) {
                         currentList[lastIndex + index] = newsItem
-                        Log.i("TopStoryVM", "currentList size is: ${currentList.size}, lastIndex is $lastIndex, index is $index, endIndex is $endIndex")
                         _newsList.value = currentList.toMutableList()
-                        loadingItemCount--  // Decrement counter
+                        loadingItemCount--
                     }
-                    Unit // Explicitly return Unit
+                    Unit
                 }
                 fetchJobs.add(fetchJob)
             }
