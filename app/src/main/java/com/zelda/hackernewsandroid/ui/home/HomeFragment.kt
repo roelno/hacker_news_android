@@ -31,6 +31,7 @@ class HomeFragment : Fragment() {
 
         // Set up the swipe refresh action
         binding.swipeRefreshLayout.setOnRefreshListener {
+            homeViewModel.clearNewsList() // Clear current data
             homeViewModel.fetchTopNews()
         }
 

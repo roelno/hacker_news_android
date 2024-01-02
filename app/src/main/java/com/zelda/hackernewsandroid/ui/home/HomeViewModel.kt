@@ -40,6 +40,10 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    fun clearNewsList() {
+        _newsList.value = mutableListOf()
+    }
+
 
     private suspend fun fetchStoryWithContent(id: Long): News? {
         return withContext(Dispatchers.IO) { // Switch to IO dispatcher for network operation
