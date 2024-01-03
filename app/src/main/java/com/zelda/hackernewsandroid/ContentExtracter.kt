@@ -9,9 +9,9 @@ object ContentExtractor {
 
     private val client = OkHttpClient()
 
-    fun fetchContent(url: String): String {
+    fun fetchContent(url: String?): String {
         val request = Request.Builder()
-            .url(url)
+            .url(url.toString())
             .build()
 
         client.newCall(request).execute().use { response ->

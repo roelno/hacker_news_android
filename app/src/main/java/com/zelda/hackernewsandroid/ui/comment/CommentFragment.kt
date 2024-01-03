@@ -25,6 +25,7 @@ class CommentFragment : Fragment() {
 
         // Retrieve id
         val id = arguments?.getLong("id")
+        viewModel.title.value = id.toString()
 
         return binding.root
     }
