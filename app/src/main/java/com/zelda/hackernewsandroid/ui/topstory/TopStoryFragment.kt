@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zelda.hackernewsandroid.News
 import com.zelda.hackernewsandroid.NewsRecyclerViewAdapter
+import com.zelda.hackernewsandroid.R
 import com.zelda.hackernewsandroid.databinding.FragmentTopStoryBinding
 
 class TopStoryFragment : Fragment() {
@@ -59,7 +61,7 @@ class TopStoryFragment : Fragment() {
     }
 
     private fun onNewsItemClicked(news: News) {
-        Toast.makeText(context, "Clicked on: ${news.title}", Toast.LENGTH_SHORT).show()
+        findNavController().navigate(R.id.action_navigation_top_story_to_commentFragment)
     }
 
     private fun setupSwipeRefreshLayout() {
