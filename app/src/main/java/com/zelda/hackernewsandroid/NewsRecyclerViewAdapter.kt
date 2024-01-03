@@ -6,7 +6,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class NewsRecyclerViewAdapter(val newsList: MutableList<News>) : RecyclerView.Adapter<NewsViewHolder>() {
+class NewsRecyclerViewAdapter(
+    private val newsList: MutableList<News>,
+    private val onClick: (News) -> Unit
+) : RecyclerView.Adapter<NewsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val newsItem = layoutInflater.inflate(R.layout.news_item, parent, false)
@@ -18,8 +21,9 @@ class NewsRecyclerViewAdapter(val newsList: MutableList<News>) : RecyclerView.Ad
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        val news = newsList[position]
-        holder.bind(news)
+        val newsItem = newsList[position]
+        holder.bind(newsItem)
+        holder.itemView.setOnClickListener { onClick(newsItem) }
     }
 
     fun updateNewsList(news: List<News>) {

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.zelda.hackernewsandroid.News
 import com.zelda.hackernewsandroid.NewsRecyclerViewAdapter
 import com.zelda.hackernewsandroid.databinding.FragmentTopStoryBinding
 
@@ -36,7 +37,7 @@ class TopStoryFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        val adapter = NewsRecyclerViewAdapter(mutableListOf())
+        val adapter = NewsRecyclerViewAdapter(mutableListOf(), this::onNewsItemClicked)
         binding.newsRecyclerView.adapter = adapter
         binding.newsRecyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -55,6 +56,10 @@ class TopStoryFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun onNewsItemClicked(news: News) {
+        Toast.makeText(context, "Clicked on: ${news.title}", Toast.LENGTH_SHORT).show()
     }
 
     private fun setupSwipeRefreshLayout() {
