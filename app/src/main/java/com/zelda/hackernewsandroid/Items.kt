@@ -1,6 +1,6 @@
 package com.zelda.hackernewsandroid
 
-class News(
+class Items(
     var id: Long,
     var title: String,
     var context: String,

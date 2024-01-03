@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zelda.hackernewsandroid.ContentExtractor
-import com.zelda.hackernewsandroid.News
+import com.zelda.hackernewsandroid.Items
 import com.zelda.hackernewsandroid.api.RetrofitInstance
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -17,14 +17,13 @@ import kotlinx.coroutines.withContext
 
 class TopStoryViewModel : ViewModel() {
 
-    private val _newsList = MutableLiveData<MutableList<News?>>()
-    val newsList: LiveData<MutableList<News?>> = _newsList
+    private val _newsList = MutableLiveData<MutableList<Items?>>()
+    val newsList: LiveData<MutableList<Items?>> = _newsList
 
     private var storyIds = listOf<Long>()
     private var lastIndex = 0
     private val pageSize = 20
 
-    //    var isLoading = false
     var isLoading = MutableLiveData<Boolean>().apply { value = false }
     var isLastPage = false
     private var loadingItemCount = 0
@@ -82,7 +81,7 @@ class TopStoryViewModel : ViewModel() {
         }
     }
 
-    private suspend fun fetchStoryWithContent(id: Long): News? {
+    private suspend fun fetchStoryWithContent(id: Long): Items? {
         return withContext(Dispatchers.IO) {
             try {
                 val story = RetrofitInstance.api.getStory(id)

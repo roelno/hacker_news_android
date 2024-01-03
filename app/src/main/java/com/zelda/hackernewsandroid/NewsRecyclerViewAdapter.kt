@@ -7,8 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class NewsRecyclerViewAdapter(
-    private val newsList: MutableList<News>,
-    private val onClick: (News) -> Unit
+    private val newsList: MutableList<Items>,
+    private val onClick: (Items) -> Unit
 ) : RecyclerView.Adapter<NewsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -26,7 +26,7 @@ class NewsRecyclerViewAdapter(
         holder.itemView.setOnClickListener { onClick(newsItem) }
     }
 
-    fun updateNewsList(news: List<News>) {
+    fun updateNewsList(news: List<Items>) {
         newsList.clear()
         newsList.addAll(news)
         notifyDataSetChanged()
@@ -35,7 +35,7 @@ class NewsRecyclerViewAdapter(
 }
 
 class NewsViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-    fun bind(news: News) {
+    fun bind(news: Items) {
         val title = view.findViewById<TextView>(R.id.title_text)
         val content = view.findViewById<TextView>(R.id.content_text)
         title.text = news.title

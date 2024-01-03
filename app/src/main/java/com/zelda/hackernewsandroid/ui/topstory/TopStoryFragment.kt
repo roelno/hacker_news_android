@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.zelda.hackernewsandroid.News
+import com.zelda.hackernewsandroid.Items
 import com.zelda.hackernewsandroid.NewsRecyclerViewAdapter
 import com.zelda.hackernewsandroid.R
 import com.zelda.hackernewsandroid.databinding.FragmentTopStoryBinding
@@ -63,7 +63,7 @@ class TopStoryFragment : Fragment() {
         })
     }
 
-    private fun onNewsItemClicked(news: News) {
+    private fun onNewsItemClicked(news: Items) {
         val bundle = Bundle().apply {
             putString("title", news.title)
             putLong("id", news.id)

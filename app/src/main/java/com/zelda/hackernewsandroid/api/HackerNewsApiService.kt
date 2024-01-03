@@ -1,6 +1,6 @@
 package com.zelda.hackernewsandroid.api
 
-import com.zelda.hackernewsandroid.News
+import com.zelda.hackernewsandroid.Items
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -12,5 +12,5 @@ interface HackerNewsApiService {
     suspend fun getTopStoryIds(): List<Long>
 
     @GET("item/{id}.json")
-    suspend fun getStory(@Path("id") id: Long): News
+    suspend fun getStory(@Path("id") id: Long): Items
 }
