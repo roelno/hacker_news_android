@@ -9,7 +9,7 @@
         android:id="@+id/navigation_top_story"
         android:name="com.zelda.hackernewsandroid.ui.topstory.TopStoryFragment"
         android:label="Top Stories"
-        tools:layout="@layout/fragment_top_story" >
+        tools:layout="@layout/fragment_top_story">
         <action
             android:id="@+id/action_navigation_top_story_to_commentFragment"
             app:destination="@id/commentFragment" />
@@ -31,6 +31,11 @@
         android:id="@+id/commentFragment"
         android:name="com.zelda.hackernewsandroid.ui.comment.CommentFragment"
         android:label="Comments"
-        tools:layout="@layout/fragment_comment" />
+        tools:layout="@layout/fragment_comment">
+        <argument
+            android:name = "title"
+            app:argType="string" />
+
+    </fragment>
 
 </navigation>

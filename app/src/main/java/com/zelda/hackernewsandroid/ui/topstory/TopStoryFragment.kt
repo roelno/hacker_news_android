@@ -61,7 +61,9 @@ class TopStoryFragment : Fragment() {
     }
 
     private fun onNewsItemClicked(news: News) {
-        findNavController().navigate(R.id.action_navigation_top_story_to_commentFragment)
+        val bundle = Bundle()
+        bundle.putString("title", news.title)
+        findNavController().navigate(R.id.action_navigation_top_story_to_commentFragment, bundle)
     }
 
     private fun setupSwipeRefreshLayout() {
