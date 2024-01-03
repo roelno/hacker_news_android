@@ -23,10 +23,17 @@ class CommentFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        // Retrieve id
-        val id = arguments?.getLong("id")
-        viewModel.title.value = id.toString()
+        // Retrieve News id
+        val newsId = arguments?.getLong("id")
+        viewModel.newsID.value = newsId.toString()
+
+        // load the News Comment page
+        fetchNewsCommentDetails(newsId!!)
 
         return binding.root
+    }
+
+    private fun fetchNewsCommentDetails(itemId: Long) {
+        viewModel.fetchItemDetails(itemId) // Implement this method in your ViewModel
     }
 }

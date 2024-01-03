@@ -12,7 +12,7 @@ class NewsRecyclerViewAdapter(
 ) : RecyclerView.Adapter<NewsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val newsItem = layoutInflater.inflate(R.layout.news_item, parent, false)
+        val newsItem = layoutInflater.inflate(R.layout.item_news, parent, false)
         return NewsViewHolder(newsItem)
     }
 
