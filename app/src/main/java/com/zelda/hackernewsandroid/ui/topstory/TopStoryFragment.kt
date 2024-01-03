@@ -64,8 +64,10 @@ class TopStoryFragment : Fragment() {
     }
 
     private fun onNewsItemClicked(news: News) {
-        val bundle = Bundle()
-        bundle.putString("title", news.title)
+        val bundle = Bundle().apply {
+            putString("title", news.title)
+            putLong("id", news.id)
+        }
         findNavController().navigate(R.id.action_navigation_top_story_to_commentFragment, bundle)
     }
 

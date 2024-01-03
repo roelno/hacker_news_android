@@ -23,9 +23,8 @@ class CommentFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        // Retrieve and set the title
-        val title = arguments?.getString("title")
-        viewModel.title.value = title
+        // Retrieve id
+        val id = arguments?.getLong("id")
 
         return binding.root
     }
