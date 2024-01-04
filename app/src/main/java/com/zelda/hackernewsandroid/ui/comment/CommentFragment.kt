@@ -1,12 +1,12 @@
 package com.zelda.hackernewsandroid.ui.comment
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.zelda.hackernewsandroid.R
 import com.zelda.hackernewsandroid.databinding.FragmentCommentBinding
 
@@ -25,15 +25,42 @@ class CommentFragment : Fragment() {
 
         // Retrieve News id
         val newsId = arguments?.getLong("id")
-        viewModel.newsID.value = newsId.toString()
+        val commentKidsIDs = arguments?.getLong("kids")
+//        viewModel.newsID.value = newsId.toString()
 
-        // load the News Comment page
-        fetchNewsCommentDetails(newsId!!)
+        viewModel.fetchItemDetails(newsId!!)
+        setupObservers()
 
         return binding.root
     }
 
-    private fun fetchNewsCommentDetails(itemId: Long) {
-        viewModel.fetchItemDetails(itemId) // Implement this method in your ViewModel
+    private fun setupObservers() {
+        viewModel.storyDetails.observe(viewLifecycleOwner) { story ->
+            story?.let {
+                binding.titleText.text = it.title ?: ""
+                var pts = "${it.score?.toString() ?: "0"} pts"
+                var cmts = "${it.kids?.size?.toString() ?: "0"} cmts"
+                var postBy = "by ${it.by!!}"
+                var time = "${getTimeAgo(it.time!!)}"
+                binding.pointsCommentsPostByTimeText.text = pts + " | " + cmts + " | " + postBy +" | " + time
+            }
+        }
     }
+
+    fun getTimeAgo(time: Long): String {
+        val currentTime = System.currentTimeMillis() / 1000
+        val diffInSeconds = currentTime - time
+
+        val minutes = diffInSeconds / 60
+        val hours = minutes / 60
+        val days = hours / 24
+
+        return when {
+            days > 0 -> "$days days ago"
+            hours > 0 -> "$hours hours ago"
+            minutes > 0 -> "$minutes minutes ago"
+            else -> "Just now"
+        }
+    }
+
 }

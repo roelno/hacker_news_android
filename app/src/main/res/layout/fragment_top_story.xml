@@ -51,6 +51,7 @@
                 android:indeterminate="false"
                 android:indeterminateTint="@color/black"
                 android:padding="8dp"
+                android:elevation="3dp"
                 android:visibility="gone" />
 
         </FrameLayout>

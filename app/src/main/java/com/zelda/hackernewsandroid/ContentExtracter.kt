@@ -16,6 +16,7 @@ object ContentExtractor {
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Failed to download content: $url")
+            // later to handler error: java.io.IOException: Failed to download content: https://twitter.com/Bertrand_Meyer/status/1742613897675178347
 
             val htmlContent = response.body?.string() ?: ""
             return extractTextFromHtml(htmlContent)

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.zelda.hackernewsandroid.ui.comment.CommentViewModel" />
@@ -27,11 +28,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:fontFamily="@font/alike"
                 android:paddingBottom="3dp"
-                android:text="@{viewModel.title + `(` + viewModel.url + `)` }"
+                android:text="Title"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -49,56 +50,33 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:weightSum="10"
                 android:orientation="horizontal">
 
 
                 <TextView
-                    android:id="@+id/points_score_text"
-                    android:layout_width="0dp"
+                    android:id="@+id/pointsCommentsPostByTime_text"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:fontFamily="@font/alike"
-                    android:text="@{viewModel.score}"
-                    android:textColor="#777272"
+                    android:layout_weight="9"
+                    android:text="1099 Score | 118 cmts | by zelda | 12 hours ago"
+                    android:textColor="#9F9F9F"
                     android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/comment_size_text"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/alike"
-                    android:text="118 cmts"
-                    android:textColor="#777272"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/postBy_text"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/alike"
-                    android:text="@{viewModel.by}"
-                    android:textColor="#777272"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/postTime_text"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/alike"
-                    android:text="@{viewModel.formatTime}"
-                    android:textColor="#777272"
-                    android:textSize="15sp" />
-
-                <Button
+                <ImageButton
                     android:id="@+id/favourite_btn"
-                    style="@style/Widget.Material3.Button.Icon"
+                    style="@android:style/Widget.Material.Button.Small"
                     android:layout_width="30dp"
-                    android:layout_height="22dp"
-                    android:text="like"
-                    android:textColor="@color/white" />
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:elevation="0dp"
+                    android:padding="1dp"
+                    android:src="@drawable/bookmark_off"
+                    android:scaleType="fitCenter" />
+
 
             </LinearLayout>
 

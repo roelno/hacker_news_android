@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zelda.hackernewsandroid.Items
 import com.zelda.hackernewsandroid.api.RetrofitInstance
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -12,24 +13,17 @@ import java.util.Locale
 
 class CommentViewModel : ViewModel() {
 
-    val newsID = MutableLiveData<String>()
+//    val newsID = MutableLiveData<String>() // retrieved from TopStoryFragment
 
-    val title = MutableLiveData<String>()
-    val url = MutableLiveData<String?>()
-    val score = MutableLiveData<Int?>()
-    val by = MutableLiveData<String>()
-    val time = MutableLiveData<Long>()
+    val storyDetails = MutableLiveData<Items>()
+
+
 
     fun fetchItemDetails(itemId: Long) {
         viewModelScope.launch {
             try {
-                val itemDetails = RetrofitInstance.api.getStory(itemId)
-                title.postValue(itemDetails.title!!)
-                url.postValue(itemDetails.url)
-                score.postValue(itemDetails.score)
-                by.postValue(itemDetails.by!!)
-                time.postValue(itemDetails.time!!)
-                // Update other fields as necessary
+                val newsItem = RetrofitInstance.api.getStory(itemId)
+                storyDetails.postValue(newsItem)
             } catch (e: Exception) {
                 Log.e("CommentViewModel", "Error fetching item details", e)
                 // Handle error
