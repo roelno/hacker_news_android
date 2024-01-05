@@ -20,6 +20,8 @@ class CommentViewModel : ViewModel() {
     val storyDetails = MutableLiveData<Items>()
     val comments = MutableLiveData<List<Items>>()
     private val pageSize = 5
+    val isLoading = MutableLiveData<Boolean>()
+
 
     fun fetchStoryDetails(itemId: Long, page: Int = 0) {
         viewModelScope.launch {
@@ -46,6 +48,9 @@ class CommentViewModel : ViewModel() {
                     // Use postValue to append new comments to existing list
                     val existingComments = comments.value.orEmpty()
                     comments.postValue(existingComments + fetchedComments)
+
+                    comments.postValue(existingComments + fetchedComments)
+                    isLoading.postValue(false)
                 }
             } catch (e: Exception) {
                 Log.e("CommentViewModel", "Error fetching story details", e)
@@ -70,6 +75,7 @@ class CommentViewModel : ViewModel() {
 
     fun loadNextPage(itemId: Long) {
         val currentPage = (comments.value?.size ?: 0) / pageSize
+        isLoading.postValue(true) // Show progress bar
         fetchStoryDetails(itemId, currentPage + 1)
     }
 

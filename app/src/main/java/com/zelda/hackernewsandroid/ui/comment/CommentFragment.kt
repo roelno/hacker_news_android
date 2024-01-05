@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -75,6 +76,10 @@ class CommentFragment : Fragment() {
             (binding.commentsRecyclerView.adapter as CommentsAdapter).updateComments(comments)
         }
         binding.swipeRefreshLayout.isRefreshing = false
+
+        viewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            binding.commentsLoadingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
     }
 
     fun getTimeAgo(time: Long): String {
