@@ -1,5 +1,11 @@
 package com.zelda.hackernewsandroid.ui.comment
 
+import android.graphics.Color
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +25,19 @@ class CommentsAdapter(private val comments: MutableList<Items>) :
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
         val comment = comments[position]
-        holder.commentPoster.text = comment.by
+        val userName = comment.by ?: ""
+        val timeAgo = getTimeAgo(comment.time!!)
+
+        val styledText = SpannableString("$userName  $timeAgo").apply {
+            setSpan(StyleSpan(Typeface.BOLD), 0, userName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            setSpan(ForegroundColorSpan(Color.rgb(255,102, 0)), 0, userName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            val startIndexOfTime = userName.length + 2 // Including the comma and space
+            setSpan(StyleSpan(Typeface.ITALIC), startIndexOfTime, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            setSpan(ForegroundColorSpan(Color.LTGRAY), startIndexOfTime, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        holder.commentPoster.text = styledText
         holder.commentTextView.text = comment.text
     }
 
@@ -29,6 +47,22 @@ class CommentsAdapter(private val comments: MutableList<Items>) :
         comments.clear()
         comments.addAll(newComments)
         notifyDataSetChanged()
+    }
+
+    fun getTimeAgo(time: Long): String {
+        val currentTime = System.currentTimeMillis() / 1000
+        val diffInSeconds = currentTime - time
+
+        val minutes = diffInSeconds / 60
+        val hours = minutes / 60
+        val days = hours / 24
+
+        return when {
+            days > 0 -> "$days days ago"
+            hours > 0 -> "$hours hours ago"
+            minutes > 0 -> "$minutes minutes ago"
+            else -> "Just now"
+        }
     }
 }
 

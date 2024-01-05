@@ -19,7 +19,7 @@ class CommentViewModel : ViewModel() {
 
     val storyDetails = MutableLiveData<Items>()
     val comments = MutableLiveData<List<Items>>()
-    private val pageSize = 10
+    private val pageSize = 5
 
     fun fetchStoryDetails(itemId: Long, page: Int = 0) {
         viewModelScope.launch {
@@ -71,4 +71,7 @@ class CommentViewModel : ViewModel() {
         val currentPage = (comments.value?.size ?: 0) / pageSize
         fetchStoryDetails(itemId, currentPage + 1)
     }
+
+
+
 }
