@@ -29,11 +29,18 @@ class CommentFragment : Fragment() {
 
         newsId = arguments?.getLong("id")!!
         viewModel.fetchStoryDetails(newsId!!)
+        setupSwipeRefreshLayout()
         setupRecyclerView()
         setupHeaderObservers()
         setupCommentsObservers()
 
         return binding.root
+    }
+
+    private fun setupSwipeRefreshLayout() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.fetchStoryDetails(newsId)
+        }
     }
 
 
@@ -59,6 +66,7 @@ class CommentFragment : Fragment() {
                 var time = "${getTimeAgo(it.time!!)}"
                 binding.pointsCommentsPostByTimeText.text = pts + " | " + cmts + " | " + postBy +" | " + time
             }
+            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 
@@ -66,6 +74,7 @@ class CommentFragment : Fragment() {
         viewModel.comments.observe(viewLifecycleOwner) { comments ->
             (binding.commentsRecyclerView.adapter as CommentsAdapter).updateComments(comments)
         }
+        binding.swipeRefreshLayout.isRefreshing = false
     }
 
     fun getTimeAgo(time: Long): String {

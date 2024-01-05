@@ -27,6 +27,7 @@ class CommentViewModel : ViewModel() {
                 val newsItem = RetrofitInstance.api.getItem(itemId)
                 if (page == 0) {
                     storyDetails.postValue(newsItem)
+                    comments.postValue(emptyList())
                 }
 
                 newsItem.kids?.let { kids ->
