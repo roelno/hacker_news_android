@@ -6,7 +6,7 @@
     android:layout_margin="10dp">
 
     <TextView
-        android:id="@+id/title_text"
+        android:id="@+id/user_name_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/content_text"
+        android:id="@+id/comment_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -34,6 +34,6 @@
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_text" />
+        app:layout_constraintTop_toBottomOf="@id/user_name_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
