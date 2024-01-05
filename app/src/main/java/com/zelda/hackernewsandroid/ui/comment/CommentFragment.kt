@@ -7,34 +7,49 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.zelda.hackernewsandroid.R
 import com.zelda.hackernewsandroid.databinding.FragmentCommentBinding
 
 class CommentFragment : Fragment() {
     private lateinit var viewModel: CommentViewModel
     private lateinit var binding: FragmentCommentBinding
+    private var newsId: Long = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_comment, container, false)
-        viewModel = ViewModelProvider(this).get(CommentViewModel::class.java)
+        viewModel = ViewModelProvider(this)[CommentViewModel::class.java]
         binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
-        // Retrieve News id
-        val newsId = arguments?.getLong("id")
-        val commentKidsIDs = arguments?.getLong("kids")
-//        viewModel.newsID.value = newsId.toString()
 
-        viewModel.fetchItemDetails(newsId!!)
-        setupObservers()
+        newsId = arguments?.getLong("id")!!
+        viewModel.fetchStoryDetails(newsId!!)
+        setupRecyclerView()
+        setupHeaderObservers()
+        setupCommentsObservers()
 
         return binding.root
     }
 
-    private fun setupObservers() {
+
+    private fun setupRecyclerView() {
+        binding.commentsRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.commentsRecyclerView.adapter = CommentsAdapter(mutableListOf())
+        binding.commentsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (!recyclerView.canScrollVertically(1)) { // Check if we've reached the bottom
+                    viewModel.loadNextPage(newsId)
+                }
+            }
+        })
+    }
+
+    private fun setupHeaderObservers() {
         viewModel.storyDetails.observe(viewLifecycleOwner) { story ->
             story?.let {
                 binding.titleText.text = it.title ?: ""
@@ -44,6 +59,12 @@ class CommentFragment : Fragment() {
                 var time = "${getTimeAgo(it.time!!)}"
                 binding.pointsCommentsPostByTimeText.text = pts + " | " + cmts + " | " + postBy +" | " + time
             }
+        }
+    }
+
+    private fun setupCommentsObservers() {
+        viewModel.comments.observe(viewLifecycleOwner) { comments ->
+            (binding.commentsRecyclerView.adapter as CommentsAdapter).updateComments(comments)
         }
     }
 
@@ -62,5 +83,4 @@ class CommentFragment : Fragment() {
             else -> "Just now"
         }
     }
-
 }

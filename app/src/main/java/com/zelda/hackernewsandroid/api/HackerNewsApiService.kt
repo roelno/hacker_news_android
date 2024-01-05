@@ -12,7 +12,7 @@ interface HackerNewsApiService {
     suspend fun getTopStoryIds(): List<Long>
 
     @GET("item/{id}.json")
-    suspend fun getStory(@Path("id") id: Long): Items
+    suspend fun getItem(@Path("id") id: Long): Items
 
 
 }

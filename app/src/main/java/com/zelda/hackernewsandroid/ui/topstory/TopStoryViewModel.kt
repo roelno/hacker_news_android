@@ -84,7 +84,7 @@ class TopStoryViewModel : ViewModel() {
     private suspend fun fetchStoryWithContent(id: Long): Items? {
         return withContext(Dispatchers.IO) {
             try {
-                val story = RetrofitInstance.api.getStory(id)
+                val story = RetrofitInstance.api.getItem(id)
                 story.context = ContentExtractor.fetchContent(story.url).take(300)
                 story
             } catch (e: Exception) {

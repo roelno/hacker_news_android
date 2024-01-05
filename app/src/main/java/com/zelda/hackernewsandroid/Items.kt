@@ -21,4 +21,6 @@ class Items(
     // defined by me, this would be fetched through News's url
     // especially for News Item
     var context: String? = null,
+
+    var childComments: List<Items>? = null // for extensible comments
 )
