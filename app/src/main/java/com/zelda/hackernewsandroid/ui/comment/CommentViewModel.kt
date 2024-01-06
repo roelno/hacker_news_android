@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.zelda.hackernewsandroid.Items
 import com.zelda.hackernewsandroid.api.RetrofitInstance
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
@@ -25,6 +26,7 @@ class CommentViewModel : ViewModel() {
 
     fun fetchStoryDetails(itemId: Long, page: Int = 0) {
         viewModelScope.launch {
+            isLoading.postValue(true)
             try {
                 val newsItem = RetrofitInstance.api.getItem(itemId)
                 if (page == 0) {
@@ -35,28 +37,39 @@ class CommentViewModel : ViewModel() {
                 newsItem.kids?.let { kids ->
                     val startIndex = page * pageSize
                     val endIndex = min(startIndex + pageSize, kids.size)
-
                     val currentKids = kids.subList(startIndex, endIndex)
-                    val fetchedComments = mutableListOf<Items>()
 
-                    val commentsDeferred = currentKids.map { kidId ->
-                        async { fetchCommentDetails(kidId).await() }
+                    val fetchJobs = mutableListOf<Deferred<Items?>>()
+                    val fetchedComments = MutableList<Items?>(currentKids.size) { null }
+
+                    currentKids.forEachIndexed { index, kidId ->
+                        val fetchJob = async(Dispatchers.IO) {
+                            fetchCommentDetails(kidId).await()
+                        }
+                        fetchJobs.add(fetchJob)
+
+                        fetchJob.invokeOnCompletion {
+                            fetchedComments[index] = fetchJob.getCompleted()
+                        }
                     }
 
-                    fetchedComments.addAll(commentsDeferred.awaitAll().filterNotNull())
+                    fetchJobs.awaitAll()
 
-                    // Use postValue to append new comments to existing list
+                    // Filter null values
+                    val nonNullFetchedComments = fetchedComments.filterNotNull()
+
                     val existingComments = comments.value.orEmpty()
-                    comments.postValue(existingComments + fetchedComments)
-
-                    comments.postValue(existingComments + fetchedComments)
-                    isLoading.postValue(false)
+                    comments.postValue(existingComments + nonNullFetchedComments)
                 }
             } catch (e: Exception) {
                 Log.e("CommentViewModel", "Error fetching story details", e)
+            } finally {
+                isLoading.postValue(false)
             }
         }
     }
+
+
 
     fun fetchCommentDetails(itemId: Long): Deferred<Items?> = viewModelScope.async {
         try {
