@@ -1,6 +1,10 @@
 package com.zelda.hackernewsandroid.ui.comment
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,7 +64,17 @@ class CommentFragment : Fragment() {
     private fun setupHeaderObservers() {
         viewModel.storyDetails.observe(viewLifecycleOwner) { story ->
             story?.let {
-                binding.titleText.text = it.title ?: ""
+
+                val underlinedTitle = SpannableString(it.title)
+                underlinedTitle.setSpan(UnderlineSpan(), 0, underlinedTitle.length, 0)
+                binding.titleText.text = underlinedTitle
+
+                binding.titleText.tag = it.url
+                binding.titleText.setOnClickListener { view ->
+                    val url = view.tag as? String
+                    url?.let { openWebUrl(it) }
+                }
+
                 var pts = "${it.score?.toString() ?: "0"} pts"
                 var cmts = "${it.kids?.size?.toString() ?: "0"} cmts"
                 var postBy = "by ${it.by!!}"
@@ -80,6 +94,12 @@ class CommentFragment : Fragment() {
         viewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
             binding.commentsLoadingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         })
+    }
+
+    private fun openWebUrl(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(url)
+        startActivity(intent)
     }
 
     fun getTimeAgo(time: Long): String {

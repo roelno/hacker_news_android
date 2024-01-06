@@ -25,6 +25,9 @@
 
             <TextView
                 android:id="@+id/title_text"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -33,7 +36,7 @@
                 android:fontFamily="@font/alike"
                 android:paddingBottom="3dp"
                 android:text="Title"
-                android:textColor="@color/black"
+                android:textColor="#3F51B5"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
