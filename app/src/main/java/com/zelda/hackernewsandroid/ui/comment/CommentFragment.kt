@@ -31,23 +31,16 @@ class CommentFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-
-        newsId = arguments?.getLong("id")!!
-        viewModel.fetchStoryDetails(newsId!!)
-        setupSwipeRefreshLayout()
         setupRecyclerView()
+        setupSwipeRefreshLayout()
         setupHeaderObservers()
         setupCommentsObservers()
 
+        newsId = arguments?.getLong("id")!!
+        viewModel.fetchStoryDetails(newsId!!)
+
         return binding.root
     }
-
-    private fun setupSwipeRefreshLayout() {
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.fetchStoryDetails(newsId)
-        }
-    }
-
 
     private fun setupRecyclerView() {
         binding.commentsRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -59,6 +52,12 @@ class CommentFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun setupSwipeRefreshLayout() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.fetchStoryDetails(newsId)
+        }
     }
 
     private fun setupHeaderObservers() {
@@ -95,6 +94,9 @@ class CommentFragment : Fragment() {
             binding.commentsLoadingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         })
     }
+
+
+
 
     private fun openWebUrl(url: String) {
         val intent = Intent(Intent.ACTION_VIEW)
