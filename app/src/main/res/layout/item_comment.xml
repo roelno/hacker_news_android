@@ -10,14 +10,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.8"
+            android:layout_weight="1"
             android:orientation="vertical"
             android:paddingEnd="8dp">
 
@@ -56,21 +56,36 @@
         </LinearLayout>
 
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/comment_button_vertical_bar"
             android:layout_width="wrap_content"
-            android:layout_weight="1.4"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="0">
 
-            <Button
-                android:id="@+id/expand_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
+            <ImageButton
+                android:id="@+id/vote_button"
+                android:layout_width="30dp"
+                android:layout_height="24dp"
+                android:background="@drawable/ic_vote4"
+                android:contentDescription="VOTE"
+                android:scaleType="centerInside"
+                app:layout_constraintBottom_toTopOf="@+id/expand_button"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ToggleButton
+                android:id="@+id/expand_button"
+                android:layout_width="30dp"
+                android:layout_height="28dp"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center_vertical"
                 android:background="@drawable/toggle_expand_collapse"
-                android:layout_gravity="center_vertical"/>
+                android:scaleType="centerInside"
+                android:textOff=""
+                android:textOn=""
+                app:layout_constraintBottom_toBottomOf="@id/comment_button_vertical_bar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

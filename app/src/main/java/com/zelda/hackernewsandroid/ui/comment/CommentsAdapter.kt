@@ -52,8 +52,10 @@ class CommentsAdapter(private val comments: MutableList<Items>) :
             // toggle the visibility and update the child comments
             if (holder.childCommentsRecyclerView.visibility == View.VISIBLE) {
                 holder.childCommentsRecyclerView.visibility = View.GONE
+                holder.expandButton.isChecked = true
             } else {
                 holder.childCommentsRecyclerView.visibility = View.VISIBLE
+                holder.expandButton.isChecked = false
                 (holder.childCommentsRecyclerView.adapter as CommentsAdapter).updateComments(comment.childComments ?: listOf())
             }
         }
@@ -91,6 +93,6 @@ class CommentsAdapter(private val comments: MutableList<Items>) :
 class CommentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val commentPoster: TextView = view.findViewById(R.id.user_name_text)
     val commentTextView: TextView = view.findViewById(R.id.comment_text)
-    val expandButton: Button = view.findViewById(R.id.expand_button)
+    val expandButton: ToggleButton = view.findViewById(R.id.expand_button)
     val childCommentsRecyclerView: RecyclerView = view.findViewById(R.id .child_comments_recycler_view)
 }
