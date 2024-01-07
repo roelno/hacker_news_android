@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.ToggleButton
 import androidx.recyclerview.widget.RecyclerView
 import com.zelda.hackernewsandroid.Items
 import com.zelda.hackernewsandroid.R
@@ -39,7 +40,18 @@ class CommentsAdapter(private val comments: MutableList<Items>) :
 
         holder.commentPoster.text = styledText
         holder.commentTextView.text = comment.text
+
+        // Set visibility of the expand button
+        holder.expandButton.visibility = if (comment.childComments?.isNotEmpty() == true) View.VISIBLE else View.GONE
+
+        // Set click listener for expand/collapse
+        holder.expandButton.setOnClickListener {
+            // Toggle the visibility of child comments
+
+        }
+
     }
+
 
     override fun getItemCount() = comments.size
 
@@ -70,4 +82,5 @@ class CommentsAdapter(private val comments: MutableList<Items>) :
 class CommentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val commentPoster: TextView = view.findViewById(R.id.user_name_text)
     val commentTextView: TextView = view.findViewById(R.id.comment_text)
+    val expandButton: ToggleButton = view.findViewById(R.id.expand_button)
 }
