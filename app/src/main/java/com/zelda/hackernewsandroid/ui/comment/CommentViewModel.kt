@@ -36,30 +36,35 @@ class CommentViewModel : ViewModel() {
 
                 newsItem.kids?.let { kids ->
                     val startIndex = page * pageSize
-                    val endIndex = min(startIndex + pageSize, kids.size)
-                    val currentKids = kids.subList(startIndex, endIndex)
+                    if (startIndex < kids.size) {
+                        val endIndex = min(startIndex + pageSize, kids.size)
+                        val currentKids = kids.subList(startIndex, endIndex)
 
-                    val fetchJobs = mutableListOf<Deferred<Items?>>()
-                    val fetchedComments = MutableList<Items?>(currentKids.size) { null }
+                        val fetchJobs = mutableListOf<Deferred<Items?>>()
+                        val fetchedComments = MutableList<Items?>(currentKids.size) { null }
 
-                    currentKids.forEachIndexed { index, kidId ->
-                        val fetchJob = async(Dispatchers.IO) {
-                            fetchCommentDetails(kidId).await()
+                        currentKids.forEachIndexed { index, kidId ->
+                            val fetchJob = async(Dispatchers.IO) {
+                                fetchCommentDetails(kidId).await()
+                            }
+                            fetchJobs.add(fetchJob)
+
+                            fetchJob.invokeOnCompletion {
+                                fetchedComments[index] = fetchJob.getCompleted()
+                            }
                         }
-                        fetchJobs.add(fetchJob)
 
-                        fetchJob.invokeOnCompletion {
-                            fetchedComments[index] = fetchJob.getCompleted()
-                        }
+                        fetchJobs.awaitAll()
+
+                        // Filter null values
+                        val nonNullFetchedComments = fetchedComments.filterNotNull()
+
+                        val existingComments = comments.value.orEmpty()
+                        comments.postValue(existingComments + nonNullFetchedComments)
+                    } else {
+                        // Handle the case where there are no more comments to load
+                        // Maybe update your UI to indicate that all comments have been loaded
                     }
-
-                    fetchJobs.awaitAll()
-
-                    // Filter null values
-                    val nonNullFetchedComments = fetchedComments.filterNotNull()
-
-                    val existingComments = comments.value.orEmpty()
-                    comments.postValue(existingComments + nonNullFetchedComments)
                 }
             } catch (e: Exception) {
                 Log.e("CommentViewModel", "Error fetching story details", e)
