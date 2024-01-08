@@ -16,21 +16,21 @@ import com.zelda.hackernewsandroid.NewsRecyclerViewAdapter
 import com.zelda.hackernewsandroid.R
 import com.zelda.hackernewsandroid.databinding.FragmentTopStoryBinding
 
-class TopStoryFragment : Fragment() {
+class StoryFragment : Fragment() {
 
     private var _binding: FragmentTopStoryBinding? = null
     private val binding
         get() = _binding
             ?: throw IllegalStateException("Binding should not be accessed after onDestroyView or before onCreateView")
 
-    private val topStoryViewModel: TopStoryViewModel by viewModels()
+    private val storyViewModel: StoryViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_top_story, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewModel = topStoryViewModel
+        binding.viewModel = storyViewModel
 
         setupRecyclerView()
         setupSwipeRefreshLayout()
@@ -53,11 +53,11 @@ class TopStoryFragment : Fragment() {
                 val totalItemCount = layoutManager.itemCount
                 val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                 val shouldLoadMore = lastVisibleItemPosition == totalItemCount - 1 &&
-                        !topStoryViewModel.isLoading.value!! &&
-                        !topStoryViewModel.isLastPage
+                        !storyViewModel.isLoading.value!! &&
+                        !storyViewModel.isLastPage
 
                 if (shouldLoadMore) {
-                    topStoryViewModel.loadMoreNews()
+                    storyViewModel.loadMoreNews()
                 }
             }
         })
@@ -74,13 +74,13 @@ class TopStoryFragment : Fragment() {
 
     private fun setupSwipeRefreshLayout() {
         binding.swipeRefreshLayout.setOnRefreshListener {
-            topStoryViewModel.refreshNews()
+            storyViewModel.refreshNews()
         }
     }
 
 
     private fun setupNewsListObserver() {
-        topStoryViewModel.newsList.observe(viewLifecycleOwner) { news ->
+        storyViewModel.newsList.observe(viewLifecycleOwner) { news ->
             val nonNullNewsList = news.filterNotNull()
             (binding.newsRecyclerView.adapter as? NewsRecyclerViewAdapter)?.updateNewsList(
                 nonNullNewsList
@@ -90,14 +90,14 @@ class TopStoryFragment : Fragment() {
     }
 
     private fun setupLoadingObserver() {
-        topStoryViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+        storyViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
     }
 
 
     private fun setupErrorMessageObserver() {
-        topStoryViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+        storyViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
             Toast.makeText(context, message, Toast.LENGTH_LONG).show()
         }
     }

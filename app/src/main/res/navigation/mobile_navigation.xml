@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_top_story"
-        android:name="com.zelda.hackernewsandroid.ui.topstory.TopStoryFragment"
+        android:name="com.zelda.hackernewsandroid.ui.topstory.StoryFragment"
         android:label="Top Stories"
         tools:layout="@layout/fragment_top_story">
         <action

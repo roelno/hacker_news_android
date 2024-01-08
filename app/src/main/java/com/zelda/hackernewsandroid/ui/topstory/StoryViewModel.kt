@@ -15,8 +15,13 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class TopStoryViewModel : ViewModel() {
 
+enum class StoryType {
+    TOP, BEST, NEW
+}
+
+class StoryViewModel : ViewModel() {
+    private lateinit var storyType: StoryType
     private val _newsList = MutableLiveData<MutableList<Items?>>()
     val newsList: LiveData<MutableList<Items?>> = _newsList
 
@@ -31,20 +36,42 @@ class TopStoryViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> = _errorMessage
 
-    init {
+//    init {
+//        fetchStoryIds(storyType)
+//    }
+
+    fun setStoryType(storyType: StoryType) {
+        this.storyType = storyType
         fetchStoryIds()
     }
 
+
+    //    private fun fetchStoryIds() {
+//        viewModelScope.launch {
+//            try {
+//                storyIds = RetrofitInstance.api.getTopStoryIds()
+//                loadMoreNews()
+//            } catch (e: Exception) {
+//                Log.e("TopStoryViewModel", "Error fetching top story IDs", e)
+//                _errorMessage.postValue("Error fetching data")
+//            }
+//        }
+//    }
     private fun fetchStoryIds() {
-        viewModelScope.launch {
-            try {
-                storyIds = RetrofitInstance.api.getTopStoryIds()
-                loadMoreNews()
-            } catch (e: Exception) {
-                Log.e("TopStoryViewModel", "Error fetching top story IDs", e)
-                _errorMessage.postValue("Error fetching data")
+        storyType?.let { type ->
+            viewModelScope.launch {
+                try {
+                    storyIds = when (type) {
+                        StoryType.TOP -> RetrofitInstance.api.getTopStoryIds()
+                        StoryType.BEST -> RetrofitInstance.api.getBestStoryIds()
+                        StoryType.NEW -> RetrofitInstance.api.getNewStoryIds()
+                    }
+                    loadMoreNews()
+                } catch (e: Exception) {
+                    // Handle the exception
+                }
             }
-        }
+        } ?: Log.e("StoryViewModel", "StoryType not set")
     }
 
     fun loadMoreNews() {

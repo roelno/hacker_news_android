@@ -6,13 +6,13 @@
     <data>
         <variable
             name="viewModel"
-            type="com.zelda.hackernewsandroid.ui.topstory.TopStoryViewModel" />
+            type="com.zelda.hackernewsandroid.ui.topstory.StoryViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.topstory.TopStoryFragment">
+        tools:context=".ui.topstory.StoryFragment">
 
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
