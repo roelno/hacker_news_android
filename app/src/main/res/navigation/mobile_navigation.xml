@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_top_story">
+    app:startDestination="@+id/navigation_story">
 
     <fragment
-        android:id="@+id/navigation_top_story"
+        android:id="@+id/navigation_story"
         android:name="com.zelda.hackernewsandroid.ui.topstory.StoryFragment"
         android:label="Top Stories"
         tools:layout="@layout/fragment_top_story">
@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.zelda.hackernewsandroid.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
+        android:label="Best Stories"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment

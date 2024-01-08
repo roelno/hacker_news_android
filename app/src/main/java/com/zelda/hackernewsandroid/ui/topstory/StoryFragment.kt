@@ -32,6 +32,15 @@ class StoryFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = storyViewModel
 
+        val storyTypeString = arguments?.getString("storyType") ?: "top"
+        val storyType = when (storyTypeString) {
+            "top" -> StoryType.TOP
+            "best" -> StoryType.BEST
+            "new" -> StoryType.NEW
+            else -> StoryType.TOP
+        }
+        storyViewModel.setStoryType(storyType)
+
         setupRecyclerView()
         setupSwipeRefreshLayout()
         setupNewsListObserver()
