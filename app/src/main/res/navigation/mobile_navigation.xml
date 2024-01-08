@@ -3,29 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_story">
+    app:startDestination="@+id/navigation_top_stories">
 
     <fragment
-        android:id="@+id/navigation_story"
-        android:name="com.zelda.hackernewsandroid.ui.topstory.StoryFragment"
+        android:id="@+id/navigation_top_stories"
+        android:name="com.zelda.hackernewsandroid.ui.topstory.TopStoriesFragment"
         android:label="Top Stories"
-        tools:layout="@layout/fragment_top_story">
+        tools:layout="@layout/fragment_topstories">
         <action
             android:id="@+id/action_navigation_top_story_to_commentFragment"
             app:destination="@id/commentFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.zelda.hackernewsandroid.ui.dashboard.DashboardFragment"
+        android:id="@+id/navigation_best_stories"
+        android:name="com.zelda.hackernewsandroid.ui.beststories.BestStoriesFragment"
         android:label="Best Stories"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_beststories" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.zelda.hackernewsandroid.ui.notifications.NotificationsFragment"
+        android:id="@+id/navigation_new_stories"
+        android:name="com.zelda.hackernewsandroid.ui.newstories.NewStoriesFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_newstories" />
 
     <fragment
         android:id="@+id/commentFragment"

@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_story"
+        android:id="@+id/navigation_topStories"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="Top Stories" />
 
     <item
-        android:id="@+id/navigation_best_story"
+        android:id="@+id/navigation_bestStories"
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="Best Stories" />
 
     <item
-        android:id="@+id/navigation_new_story"
+        android:id="@+id/navigation_newStories"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="New Stories" />
 
