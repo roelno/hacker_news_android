@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.zelda.hackernewsandroid.ui.topstory.StoryViewModel" />
+            type="com.zelda.hackernewsandroid.StoriesViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

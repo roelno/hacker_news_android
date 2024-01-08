@@ -23,23 +23,21 @@ class MainActivity : AppCompatActivity() {
         // Define top-level destinations
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_story, R.id.navigation_dashboard, R.id.navigation_notifications
+                R.id.navigation_top_stories, R.id.navigation_best_stories, R.id.navigation_new_stories
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        // Inside the onCreate or a similar initialization method
         navView.setOnNavigationItemSelectedListener { item ->
-            val bundle = Bundle()
             when (item.itemId) {
-                R.id.navigation_story -> bundle.putString("storyType", "top")
-                R.id.navigation_best_story -> bundle.putString("storyType", "best")
-                R.id.navigation_new_story -> bundle.putString("storyType", "new")
+                R.id.navigation_topStories -> navController.navigate(R.id.navigation_top_stories)
+                R.id.navigation_bestStories -> navController.navigate(R.id.navigation_best_stories)
+                R.id.navigation_newStories -> navController.navigate(R.id.navigation_new_stories)
             }
-            navController.navigate(R.id.navigation_story, bundle)
             true
         }
+
 
     }
 

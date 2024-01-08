@@ -19,22 +19,27 @@
         android:id="@+id/navigation_best_stories"
         android:name="com.zelda.hackernewsandroid.ui.beststories.BestStoriesFragment"
         android:label="Best Stories"
-        tools:layout="@layout/fragment_beststories" />
+        tools:layout="@layout/fragment_beststories" >
+        <action
+            android:id="@+id/action_navigation_best_stories_to_commentFragment"
+            app:destination="@id/commentFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_new_stories"
         android:name="com.zelda.hackernewsandroid.ui.newstories.NewStoriesFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_newstories" />
+        android:label="New Stories"
+        tools:layout="@layout/fragment_newstories" >
+        <action
+            android:id="@+id/action_navigation_new_stories_to_commentFragment"
+            app:destination="@id/commentFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/commentFragment"
         android:name="com.zelda.hackernewsandroid.ui.comment.CommentFragment"
         android:label="Comments"
         tools:layout="@layout/fragment_comment">
-<!--        <argument-->
-<!--            android:name="title"-->
-<!--            app:argType="string" />-->
 
     </fragment>
 

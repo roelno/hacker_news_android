@@ -1,12 +1,11 @@
-package com.zelda.hackernewsandroid.ui.topstory
+package com.zelda.hackernewsandroid
+
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zelda.hackernewsandroid.ContentExtractor
-import com.zelda.hackernewsandroid.Items
 import com.zelda.hackernewsandroid.api.RetrofitInstance
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -16,12 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-enum class StoryType {
-    TOP, BEST, NEW
-}
-
-class StoryViewModel : ViewModel() {
-    private lateinit var storyType: StoryType
+class StoriesViewModel : ViewModel() {
     private val _newsList = MutableLiveData<MutableList<Items?>>()
     val newsList: LiveData<MutableList<Items?>> = _newsList
 
@@ -36,28 +30,8 @@ class StoryViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> = _errorMessage
 
-//    init {
-//        fetchStoryIds(storyType)
-//    }
 
-    fun setStoryType(storyType: StoryType) {
-        this.storyType = storyType
-        fetchStoryIds()
-    }
-
-
-    //    private fun fetchStoryIds() {
-//        viewModelScope.launch {
-//            try {
-//                storyIds = RetrofitInstance.api.getTopStoryIds()
-//                loadMoreNews()
-//            } catch (e: Exception) {
-//                Log.e("TopStoryViewModel", "Error fetching top story IDs", e)
-//                _errorMessage.postValue("Error fetching data")
-//            }
-//        }
-//    }
-    private fun fetchStoryIds() {
+    fun fetchStoryIds(storyType: StoryType) {
         storyType?.let { type ->
             viewModelScope.launch {
                 try {
@@ -73,6 +47,10 @@ class StoryViewModel : ViewModel() {
             }
         } ?: Log.e("StoryViewModel", "StoryType not set")
     }
+
+
+
+
 
     fun loadMoreNews() {
         if (isLoading.value == true || isLastPage || loadingItemCount > 0) return
@@ -121,11 +99,11 @@ class StoryViewModel : ViewModel() {
         }
     }
 
-    fun refreshNews() {
+    fun refreshNews(storyType: StoryType) {
         lastIndex = 0
         isLastPage = false
         _newsList.postValue(mutableListOf())
-        fetchStoryIds()
+        fetchStoryIds(storyType)
     }
 
 }
