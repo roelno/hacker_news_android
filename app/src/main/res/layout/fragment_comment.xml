@@ -16,7 +16,7 @@
 
         <LinearLayout
             android:id="@+id/header_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
@@ -25,14 +25,12 @@
 
             <TextView
                 android:id="@+id/title_text"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:clickable="true"
+                android:focusable="true"
                 android:fontFamily="@font/alike"
                 android:paddingBottom="3dp"
                 android:text="Title"
@@ -45,43 +43,41 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="20dp"
                 android:background="?android:attr/listDivider" />
 
             <LinearLayout
                 android:id="@+id/news_post_detail_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
                 android:gravity="center"
-                android:weightSum="10"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="10">
 
 
                 <TextView
                     android:id="@+id/pointsCommentsPostByTime_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/alike"
                     android:layout_weight="9"
+                    android:fontFamily="@font/alike"
                     android:text="1099 Score | 118 cmts | by zelda | 12 hours ago"
                     android:textColor="#9F9F9F"
                     android:textSize="15sp" />
 
-                <ImageButton
+                <Button
                     android:id="@+id/favourite_btn"
-                    style="@android:style/Widget.Material.Button.Small"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:elevation="0dp"
-                    android:padding="1dp"
-                    android:src="@drawable/bookmark_off"
-                    android:scaleType="fitCenter" />
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginHorizontal="2dp"
+                    android:background="@drawable/bookmark_off"
+                    android:text="Bookmark" />
 
 
             </LinearLayout>
+
 
         </LinearLayout>
 

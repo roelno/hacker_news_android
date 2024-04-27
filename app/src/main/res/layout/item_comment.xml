@@ -7,19 +7,27 @@
 
     <LinearLayout
         android:id="@+id/comment_layout"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <View
+            android:id="@+id/divider"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:background="?android:attr/listDivider" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingEnd="8dp">
+            android:layout_marginEnd="2dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/user_name_text"
@@ -45,7 +53,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:fontFamily="@font/alike"
-                android:text="comment"
+                android:text="comment\ncomment\ncomment"
                 android:textColor="#777272"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -59,14 +67,15 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/comment_button_vertical_bar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom"
             android:layout_weight="0">
 
             <ImageButton
                 android:id="@+id/vote_button"
-                android:layout_width="30dp"
-                android:layout_height="24dp"
-                android:background="@drawable/ic_vote4"
+                android:layout_width="22dp"
+                android:layout_height="20dp"
+                android:background="@drawable/ic_vote"
                 android:contentDescription="VOTE"
                 android:scaleType="centerInside"
                 app:layout_constraintBottom_toTopOf="@+id/expand_button"
@@ -75,9 +84,8 @@
 
             <ToggleButton
                 android:id="@+id/expand_button"
-                android:layout_width="30dp"
-                android:layout_height="28dp"
-                android:layout_marginTop="30dp"
+                android:layout_width="22dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/toggle_expand_collapse"
                 android:scaleType="centerInside"
